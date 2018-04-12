@@ -15,10 +15,16 @@ def sanitize(log):
     return tuple(output)
 
 def main():
+
     if '-h' in sys.argv:
         print "{0} <no arguments>".format(sys.argv[0])
         print "(Looks for ./data)"
         sys.exit(0)
+
+    def byte_count(resource, sanitized_logs):
+        bytes = [int(b[6]) for b in sanitized_logs if b[3] == resource]
+        return sum(bytes)
+
     max = 10
 
     logs = open('data', 'r').readlines()
@@ -26,17 +32,17 @@ def main():
     two_hundreds = [l for l in slogs if l[5].startswith('2')]
     gets = [l for l in two_hundreds if l[2] == 'GET']
 
+    # count requests so we can show most
+    # requested item
     resources = {}
     for l in gets:
         if l[3] not in resources:
-            resources[l[3]] = int(l[6])
+            resources[l[3]] = 1
         else:
-            resources[l[3]] += int(l[6])
+            resources[l[3]] += 1
 
-    count = 0
-    for key in sorted(resources):
-        print "%s: %s" % (key, resources[key])
-        count += 1
-        if count == max:
-            break 
+    for key, value in sorted(resources.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        bytes = byte_count(key, gets)
+        print "%s: %s" % (key, bytes)
+
 main()
