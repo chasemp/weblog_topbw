@@ -23,7 +23,7 @@ def main():
 
     logs = open('data', 'r').readlines()
     slogs = [sanitize(log) for log in logs]
-    two_hundreds = [l for l in slogs if l[5] == '200']
+    two_hundreds = [l for l in slogs if l[5].startswith('2')]
     gets = [l for l in two_hundreds if l[2] == 'GET']
 
     resources = {}
