@@ -17,6 +17,7 @@ def sanitize(log):
 def main():
     if '-h' in sys.argv:
         print "{0} <max_items>".format(sys.argv[0])
+        print "(Looks for ./data)"
         sys.exit(0)
     max = int(sys.argv[1])
 
